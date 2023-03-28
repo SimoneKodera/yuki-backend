@@ -1,5 +1,5 @@
 {
-  "name": "yuki-todolist-backend",
+  "name": "yuki-backend",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,5 +7,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "mysql": "^2.18.1"
+  },
+  "scripts": {
+    "dev": "nodemon index.js"
   }
 }
