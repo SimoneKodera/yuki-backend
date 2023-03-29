@@ -14,15 +14,67 @@ const db = mysql.createPool({
 });
 
 // get 请求 - 查询数据库
-app.get('/allWords', (err, res) => { 
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "*");
-  db.query('SELECT * FROM all_words', (err, result) => { 
-    if (err) {
-      console.log('err occurred')
-    }
-    // 结果要json.stringify一下
-    res.end(JSON.stringify(result))
+app.get('/all', (req, res0) => { 
+  // db.query('SELECT * FROM all_words', (err, result) => { 
+  //   // 结果要json.stringify一下
+  //   res.end(JSON.stringify(result))
+  // })
+  db.query('SELECT * FROM deleted_ids', (err, ids) => {
+    db.query('SELECT * FROM all_words', (err, list) => {
+      res0.json(list.filter(word => {
+        return !ids.map(item => item.id).includes(word.id)
+      }));
+    })
+  })
+});
+
+app.delete('/all', async (req, res0) => {
+  try {
+    const promises = req.query.list.map(id => db.query(`INSERT INTO deleted_ids (id) VALUES (${id})`));
+    await Promise.all(promises);
+
+    // const [deletedIds, allWords] = await Promise.all([
+    //   db.query('SELECT * FROM deleted_ids'),
+    //   db.query('SELECT * FROM all_words')
+    // ]);
+    // const result = allWords.filter(word => !deletedIds.includes(word.id));
+    // res0.json(result);
+    
+
+    // TODO: 处理异步的问题
+    setTimeout(() => {
+      db.query('SELECT * FROM deleted_ids', (err, ids) => {
+        console.log('ids:', ids);
+        db.query('SELECT * FROM all_words', (err, list) => {
+          res0.json(list.filter(word => {
+            return !ids.map(item => item.id).includes(word.id)
+          }));
+        })
+      })
+    }, 100);
+    
+  }catch (err) {
+    res0.status(500).send(err.message);
+  }
+})
+
+app.get('/deleted', (req, res0) => {
+  db.query('SELECT * FROM deleted_ids', (err, ids) => {
+    db.query('SELECT * FROM all_words', (err, list) => {
+      res0.json(list.filter(word => {
+        return ids.map(item => item.id).includes(word.id)
+      }));
+    })
+  })
+})
+
+app.get('/test', async (req, res) => {
+  db.query('SELECT * FROM deleted_ids', (err, ids) => {
+    db.query('SELECT * FROM all_words', (err, list) => {
+      res.json(list.slice(0, 10).filter(word => {
+        return !ids.map(item => item.id).includes(word.id)
+      }));
+    })
   })
 })
 
@@ -39,6 +91,8 @@ const initData = async () => {
   }
   console.log('finished')
 }
+
+// initData();
 
 
 // app.post('/task', (err, res) => {
