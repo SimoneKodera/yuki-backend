@@ -86,7 +86,7 @@ const initData = async () => {
   for (let i = 0; i < res.data.length; i++){
     const words = res.data[i];
     // value 都要加引号, 代表字符串
-    const cmd = (`insert into all_words (word, nirakana, type, meaning, lesson_number, tone) values ('${words[4]}', '${words[0].split('@')[0]}', '${words[2]}', '${words[1]}', '${words[5]}', '${words[0].split('@')[1]}')`);
+    const cmd = (`insert into all_words (word, nirakana, type, meaning, lesson_number, tone) values ('${words[4]}', '${words[0].split('@')[0]}', '${words[2]}', '${words[3]}', '${words[5]}', '${words[0].split('@')[1]}')`);
     await db.query(cmd);
   }
   console.log('finished')
