@@ -13,6 +13,10 @@ const db = mysql.createPool({
   port: 3306,
 });
 
+// 托管静态资源
+// app.use(express.static('public'));
+
+
 // get 请求 - 查询数据库
 app.get('/all', (req, res0) => { 
   // db.query('SELECT * FROM all_words', (err, result) => { 
@@ -78,6 +82,11 @@ app.get('/test', async (req, res) => {
   })
 })
 
+// 区分前后端路由
+// app.get('*', function(req, res) {
+//   res.sendFile(__dirname + '/public/index.html');
+// });
+
 // 初始化数据
 const initData = async () => { 
   await db.query('TRUNCATE table all_words')
@@ -119,8 +128,8 @@ const initData = async () => {
   
 // });
 
-app.listen(9090);
-console.log('port listen on 9090')
+app.listen(80);
+console.log('port listen on 80')
 
 
 // db.query("insert into todolist (name) values ('loremalsdkja')", (err, res) => {
