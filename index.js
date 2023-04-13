@@ -16,6 +16,10 @@ const db = mysql.createPool({
 // 托管静态资源
 // app.use(express.static('public'));
 
+// 测试接口
+app.get('/test', (req, res) => {
+  res.send('hello world');
+});
 
 // get 请求 - 查询数据库
 app.get('/all', (req, res0) => { 
