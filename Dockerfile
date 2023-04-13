@@ -14,7 +14,7 @@ RUN yarn
 COPY . .
 
 # 暴露端口 
-EXPOSE 8080
+EXPOSE 80
 
 # 启动项目
 CMD ["yarn", "dev"]
