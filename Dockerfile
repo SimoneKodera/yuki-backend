@@ -1,5 +1,5 @@
 # 选择 Node镜像 作为基础镜像
-FROM node:v16.13.1
+FROM node:16.13.1
 
 # 创建工作目录
 WORKDIR /app
